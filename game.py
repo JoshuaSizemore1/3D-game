@@ -3,6 +3,7 @@ import random
 import os
 import math
 import threading
+import sys
 
 pwd = os.getcwd()
 
@@ -41,6 +42,11 @@ class Player():
         self.x_vol = 0
         self.y_vol = 0
         self.vol_cap = 4
+        self.look_start_point = pygame.math.Vector2(self.x_pos, self.y_pos)
+        self.angle = self.orientation
+        self.look_end_point = pygame.math.Vector2(50, -270)
+        self.current_look_end_point = self.look_start_point + self.look_end_point.rotate(self.angle)
+
 
     def update_pos(self):
         self.x_pos += self.x_vol
@@ -49,26 +55,36 @@ class Player():
     def check_key_left(self):
         key=pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
-            if self.orientation  < 360:
-                self.orientation += 5
-            else:
-                self.orientation = 0
-
-    def check_key_right(self):
-        key=pygame.key.get_pressed()
-        if key[pygame.K_RIGHT]:
             if self.orientation  > 0:
                 self.orientation -= 5
             else:
                 self.orientation = 360
+            self.angle = (self.orientation)
+            self.current_look_end_point = self.look_start_point + self.look_end_point.rotate(self.angle)
+
+    def check_key_right(self):
+        key=pygame.key.get_pressed()
+        if key[pygame.K_RIGHT]:
+            if self.orientation  < 360:
+                self.orientation += 5
+            else:
+                self.orientation = 0
+            self.angle = (self.orientation)
+            self.current_look_end_point = self.look_start_point + self.look_end_point.rotate(self.angle)
     
     def check_key_a(self):
         key=pygame.key.get_pressed()
         if key[pygame.K_a]:
-            pass
+            if (self.orientation + 90)%180 == 0.5 or (self.orientation + 90)%180 == 0:
+                pass
+    
+
+    def draw_on_map(self):
+        pygame.draw.circle(screen, self.map_color, (self.x_pos, self.y_pos), 3)
+        pygame.draw.line(screen, "red", self.look_start_point, self.current_look_end_point, 2)
 
 
-player1 = Player(0,0,"red")
+player1 = Player(500,250,"red")
 players = [player1]
 
 def update_players():
@@ -76,6 +92,8 @@ def update_players():
         player.update_pos()
         player.check_key_left()
         player.check_key_right()
+        player.draw_on_map()
+        print(player.orientation)
 
 
 def run_game():
@@ -92,3 +110,7 @@ def run_game():
         pygame.display.flip()
 
 run_game()
+
+
+pygame.quit()
+sys.exit()
