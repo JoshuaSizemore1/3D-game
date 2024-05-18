@@ -60,22 +60,17 @@ class Player():
 
 
     def check_movement(self):
-        check = False
-        check = self.check_key_w()
-        if check == True:
-            return None
+        check = 0
+        check += self.check_key_w()
+        self.update_pos()
+        check += self.check_key_d()
+        self.update_pos()
+        check += self.check_key_s()
+        self.update_pos()
+        check += self.check_key_a()
+        self.update_pos()
         
-        check = self.check_key_d()
-        if check == True:
-            return None
-        
-        check = self.check_key_s()
-        if check == True:
-            return None
-        
-        check = self.check_key_a()
-        
-        if check == False:
+        if check == 0:
             self.x_vol = 0
             self.y_vol = 0
 
@@ -118,10 +113,10 @@ class Player():
 
             self.x_vol = new_run
             self.y_vol = new_rise
-            return True
+            return 1
 
         else:
-            return False
+            return 0
     
     def check_key_w(self):
         key=pygame.key.get_pressed()
@@ -138,9 +133,9 @@ class Player():
 
             self.x_vol = new_run
             self.y_vol = new_rise
-            return True
+            return 1
         else:
-            return False
+            return 0
         
     def check_key_d(self):
         key=pygame.key.get_pressed()
@@ -157,9 +152,9 @@ class Player():
 
             self.x_vol = new_run
             self.y_vol = new_rise
-            return True
+            return 1
         else:
-            return False
+            return 0
 
     def check_key_s(self):
         key=pygame.key.get_pressed()
@@ -176,9 +171,9 @@ class Player():
 
             self.x_vol = new_run
             self.y_vol = new_rise
-            return True
+            return 1
         else:
-            return False
+            return 0
 
         
     
